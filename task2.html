@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>ITEA-JS ADVANCED - LESSON 2: CLASSWORK 2</title>
+  <link rel="stylesheet" href="css/style.min.css" />
+</head>
+<body>
+  <div class="wrap">
+    <div class="testBlock hover">
+      <button class="iButton" id="mouseHover">Наведи</button>
+      <ul id="hoverResult" class="resultBlock">
+        <li class="red">Hovered!</li>
+        <li class="blue">Hovered!</li>
+        <li class="orange">Hovered!</li>
+        <li class="red">Hovered!</li>
+        <li class="red">Hovered!</li>
+      </ul>
+    </div>
+
+    <div class="testBlock click">
+      <button class="iButton" id="mouseClick">Нажми правой кнопкой мышки</button>
+      <div id="clickResult" class="resultBlock one two three four five six"></div>
+    </div>
+
+    <div class="testBlock context">
+      <button class="iButton" id="mouseContext">Вызови контекстное меню</button>
+      <div id="contextResult" class="resultBlock"></div>
+    </div>
+
+    <div class="testBlock keyboard">
+      <button class="iButton" id="keyboardButton">Нажми на клавиатуре</button>
+      <div id="keyboardResult" class="resultBlock"></div>
+    </div>
+
+  </div>
+
+  <script>
+      const depends = {
+          I: 1,
+          V: 5,
+          X: 10,
+          L: 50,
+          C: 100,
+          D: 500,
+          M: 1000
+      };
+
+      const dependsRoman = {
+          1: 'I',
+          5: 'V',
+          10: 'X',
+          50: 'L',
+          100: 'C',
+          500: 'D',
+          1000: 'M'
+      };
+
+    class RomanNumerals {
+        static getUnits(integerValue, sign = null) {
+            let index = sign ? Math.floor(integerValue / sign) : 0;
+            let devide = index ? index * 10 : 0;
+            let firstSegment = [0, 3];
+            let secondSegment = [4, 8];
+            let thirdSegment = [9];
+            let decimalSign = sign ? sign : depends['I'];
+            let repeat, basis;
+
+            if (integerValue <  depends['L']) {
+                repeat = (depends['L'] - integerValue) / decimalSign;
+                basis = dependsRoman[decimalSign].repeat(Math.ceil(repeat)) + dependsRoman[50];
+            } else {
+                repeat = (integerValue - depends['L']) / depends['X'];
+                basis = dependsRoman[50] + dependsRoman[10].repeat(Math.floor(repeat));
+            }
+
+            basis = index === 9 ? dependsRoman[10] + dependsRoman[100] : basis;
+
+            if (integerValue >= (firstSegment[0] + devide) && integerValue <= (firstSegment[1] + devide)) {
+                let part =  dependsRoman[1].repeat(integerValue - decimalSign * index);
+                if (index > 3) {
+                    return basis + part;
+                }
+                return dependsRoman[decimalSign].repeat(index) + part;
+            }
+
+            if (integerValue >= (secondSegment[0] + devide) && integerValue <= (secondSegment[1] + devide)) {
+                if (index > 3) {
+                    if (integerValue <  decimalSign  * index + depends['V']) {
+                        return basis + dependsRoman[1].repeat((decimalSign * index + depends['V']) - integerValue) + dependsRoman[5]
+                    } else {
+                        return basis + dependsRoman[5] + dependsRoman[1].repeat(integerValue - (decimalSign * index + depends['V']))
+                    }
+                }
+                if (integerValue <  decimalSign  * index + depends['V']) {
+                    return dependsRoman[decimalSign].repeat(index) + dependsRoman[1].repeat((decimalSign * index + depends['V']) - integerValue) + dependsRoman[5]
+                } else {
+                    return dependsRoman[decimalSign].repeat(index) + dependsRoman[5] + dependsRoman[1].repeat(integerValue - (decimalSign * index + depends['V']))
+                }
+            }
+
+            if (integerValue === (thirdSegment[0] + devide)) {
+                switch (index) {
+                    case 0:
+                        return dependsRoman[1] + dependsRoman[10];
+                    case 3:
+                        return dependsRoman[1] + dependsRoman[10] + dependsRoman[50];
+                    case 4:
+                        if (integerValue <  depends['L']) {
+                            basis = dependsRoman[10].repeat(Math.floor(repeat)) + dependsRoman[50];
+                            return dependsRoman[1] + basis;
+                        } else {
+                            basis = dependsRoman[50] + dependsRoman[10].repeat(Math.ceil(repeat));
+                            return dependsRoman[1] + basis;
+                        }
+                    case 5:
+                        if (integerValue <  depends['L']) {
+                            basis = dependsRoman[10].repeat(Math.floor(repeat)) + dependsRoman[50];
+                            return dependsRoman[1] + basis;
+                        } else {
+                            basis = dependsRoman[50] + dependsRoman[10].repeat(Math.ceil(repeat));
+                            return dependsRoman[1] + basis;
+                        }
+                    case 6:
+                        if (integerValue <  depends['L']) {
+                            basis = dependsRoman[10].repeat(Math.floor(repeat)) + dependsRoman[50];
+                            return dependsRoman[1] + basis;
+                        } else {
+                            basis = dependsRoman[50] + dependsRoman[10].repeat(Math.ceil(repeat));
+                            return dependsRoman[1] + basis;
+                        }
+                    case 7:
+                        if (integerValue <  depends['L']) {
+                            basis = dependsRoman[10].repeat(Math.floor(repeat)) + dependsRoman[50];
+                            return dependsRoman[1] + basis;
+                        } else {
+                            basis = dependsRoman[50] + dependsRoman[10].repeat(Math.ceil(repeat));
+                            return dependsRoman[1] + basis;
+                        }
+                    case 8:
+                        if (integerValue >  depends['L']) {
+                            basis = dependsRoman[10] + dependsRoman[100];
+                        }
+                        return dependsRoman[1] + basis;
+                    case 9:
+                        return dependsRoman[1] + dependsRoman[100];
+                    default:
+                        return dependsRoman[1] + dependsRoman[10].repeat(index+1);
+                }
+            }
+        }
+
+        static toRoman(integerValue) {
+            let discharge;
+
+            switch (String(integerValue).length) {
+                case 1:
+                    return this.getUnits(integerValue);
+                case 2:
+                    if (integerValue >= 10 && integerValue < 40) {
+                        return this.getUnits(integerValue, depends['X']);
+                    }
+                    /** From 40 to 90 **/
+                    if (integerValue >= 40 && integerValue < 90) {
+                        return this.getUnits(integerValue, depends['X']);
+                    }
+                    /** From 80 to 99 **/
+                    if (integerValue >= 90) {
+                        return this.getUnits(integerValue, depends['X']);
+                    }
+                case 3:
+                    discharge = 'hundreds';
+                    break;
+                case 4:
+                    discharge = 'thousands';
+                    break;
+            }
+        }
+
+        static fromRoman(romanNumeral) {
+            console.log(depends[romanNumeral]);
+        }
+    }
+
+
+    for (let i = 1; i < 100; i++) {
+        console.log( i + ' : ' +  RomanNumerals.toRoman(i));
+    }
+
+
+
+
+
+
+
+  </script>
+</body>
+</html>
